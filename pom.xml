@@ -53,7 +53,7 @@
             </dependency>
 
             <!-- Arquillian Bill Of Management used to reduce collision between testing dependencies. 
-                Using a dependency manager we don't need to specify the version of each Arquillian dependency. -->
+            Using a dependency manager we don't need to specify the version of each Arquillian dependency. -->
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
@@ -201,7 +201,7 @@
                 </webapp.graphTraversalUrl>
                 <db.driverClass>org.h2.jdbcx.JdbcDataSource</db.driverClass>
                 <!-- H2 file engine requires an absolute path, eg. ~/name, ./name or a full-qualified 
-                    path name (it should include driver name under Windows). -->
+                path name (it should include driver name under Windows). -->
                 <db.jdbcUrl>jdbc:h2:file:./cargo-tracker-data/cargo-tracker-database;create=true</db.jdbcUrl>
             </properties>
 
@@ -280,6 +280,57 @@
                                     <version>${payara.version}</version>
                                 </artifactInstaller>
                             </container>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>glassfish</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <glassfish.version>7.0.2</glassfish.version>
+                <arquillian-glassfish.version>3.0.alpha1</arquillian-glassfish.version>
+                <!-- Application properties -->
+                <webapp.graphTraversalUrl>http://localhost:8080/cargo-tracker/rest/graph-traversal/shortest-path
+                </webapp.graphTraversalUrl>
+                <db.driverClass>org.apache.derby.jdbc.EmbeddedXADataSource</db.driverClass>
+                <!-- H2 file engine requires an absolute path, eg. ~/name, ./name or a full-qualified 
+                path name (it should include driver name under Windows). -->
+                <db.jdbcUrl>jdbc:derby:directory:${project.build.directory}/derbydb;create=true</db.jdbcUrl>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.omnifaces.arquillian</groupId>
+                    <artifactId>glassfish-client-ee10</artifactId>
+                    <version>1.2</version>
+                    <scope>test</scope>
+                </dependency>            
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven3-plugin</artifactId>
+                        <version>1.10.5</version>
+                        <configuration>
+                            <container>
+                                <containerId>glassfish7x</containerId>
+                                <artifactInstaller>
+                                    <groupId>org.glassfish.main.distributions</groupId>
+                                    <artifactId>glassfish</artifactId>
+                                    <version>${glassfish.version}</version>
+                                </artifactInstaller>
+                            </container>
+                            <configuration>
+                                <properties>
+                                    <cargo.glassfish.domain.debug>true</cargo.glassfish.domain.debug>
+                                </properties>
+                            </configuration>
                         </configuration>
                     </plugin>
                 </plugins>

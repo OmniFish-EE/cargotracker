@@ -71,10 +71,12 @@
 		be more operations friendly and help make deployment even faster. -->
 	<data-source>
 		<name>java:app/jdbc/CargoTrackerDatabase</name>
-		<class-name>${db.driverClass}</class-name>
-		<url>${db.jdbcUrl}</url>
-		<max-pool-size>32</max-pool-size>
-		<min-pool-size>2</min-pool-size>
+		<class-name>org.apache.derby.jdbc.EmbeddedXADataSource</class-name>
+                <database-name>${project.build.directory}/derbydb</database-name>
+                <property>
+                    <name>connectionAttributes</name>
+                    <value>;create=true</value>
+                </property>
 	</data-source>
 	<jms-destination>
 		<name>java:app/jms/CargoHandledQueue</name>
